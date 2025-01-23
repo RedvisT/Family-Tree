@@ -15,6 +15,10 @@
 
         <div class="content">
             <h2>Login</h2>
+
+            <!-- Alert message container -->
+            <div id="alert-message" style="display: none;"></div>
+
             <form method="POST" action="/login">
                 <label for="username">Username:</label>
                 <input type="text" id="username" name="username" required>
@@ -34,5 +38,28 @@
             <p>© 2025 Family History Project</p>
         </footer>
     </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // Check for the success message in the URL query parameters
+            const urlParams = new URLSearchParams(window.location.search);
+            const successMessage = urlParams.get('message');
+            if (successMessage) {
+                showAlert(successMessage, 'success');
+            }
+
+            function showAlert(message, type) {
+                const alertBox = document.getElementById('alert-message');
+                alertBox.textContent = message;
+                alertBox.className = `alert ${type}`; // Example: 'success', 'error'
+                alertBox.style.display = 'block';
+
+                // Automatically hide the alert after 5 seconds
+                setTimeout(() => {
+                    alertBox.style.display = 'none';
+                }, 5000);
+            }
+        });
+    </script>
 </body>
 </html>

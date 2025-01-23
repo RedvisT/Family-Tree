@@ -16,18 +16,15 @@
         <div class="content">
             <h2>Sign Up</h2>
 
-            <!-- Display Flash Messages -->
-            {% with messages = get_flashed_messages(with_categories=true) %}
-                {% if messages %}
-                    <ul>
-                        {% for category, message in messages %}
-                            <li class="{{ category }}">{{ message }}</li>
-                        {% endfor %}
-                    </ul>
-                {% endif %}
-            {% endwith %}
+            <!-- Alert message container -->
+            {% if error_message %}
+                <div id="alert-message" class="alert error">{{ error_message }}</div>
+            {% endif %}
+            {% if success_message %}
+                <div id="alert-message" class="alert success">{{ success_message }}</div>
+            {% endif %}
 
-            <form method="POST" action="/signup">
+            <form method="POST" action="/signup" onsubmit="return validatePassword()">
                 <label for="username">Username:</label>
                 <input type="text" id="username" name="username" required>
 

@@ -1,4 +1,4 @@
-from flask import Flask, flash, render_template, request, redirect, url_for
+from flask import Flask, render_template, request, redirect, url_for, flash
 import database_files  # Import the database functions
 import os
 
@@ -14,7 +14,7 @@ def home():
     return render_template('login.html')
 
 # Login route for user login
-@app.route('/login', methods=['POST', 'GET'])  # Allow both GET and POST methods
+@app.route('/login', methods=['POST', 'GET'])
 def login():
     if request.method == 'POST':
         username = request.form['username']
@@ -25,12 +25,12 @@ def login():
         if user:
             return redirect(url_for('family_home'))  # Redirect to family home page after successful login
         else:
-            return render_template('login.html', error="Invalid username or password")
+            return render_template('login.html', alert_message="Invalid username or password", alert_type="error")
 
     return render_template('login.html')
 
 # Signup route for creating a new user account
-@app.route('/signup', methods=['POST', 'GET'])  # Handle GET and POST requests for signup
+@app.route('/signup', methods=['POST', 'GET'])
 def signup():
     if request.method == 'POST':
         username = request.form['username']
@@ -39,20 +39,16 @@ def signup():
 
         # Check if passwords match
         if password != confirm_password:
-            flash("Passwords do not match")  # Flash the error message
-            return render_template('signup.html')
+            return render_template('signup.html', error_message="Passwords do not match")
 
         # Insert the user into the database
-        success = database_files.insert_user(username, password)
+        success, message = database_files.insert_user(username, password)
         if success:
-            flash("Account created successfully! You can now log in.")  # Flash success message
-            return redirect(url_for('login'))  # Redirect to login page after successful signup
+            return redirect(url_for('home', message="Account created successfully! You can now log in."))
         else:
-            flash("Username already exists")  # Flash error message
-            return render_template('signup.html')
+            return render_template('signup.html', error_message=message)
 
     return render_template('signup.html')
-
 
 # Family home route (after login success)
 @app.route('/family_home')

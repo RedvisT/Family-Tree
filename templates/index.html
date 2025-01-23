@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Family History</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+    <script defer src="{{ url_for('static', filename='script/script.js') }}"></script>
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <h1>Family History</h1>
+        </header>
+
+        <div class="content">
+            <div class="page" id="page1">
+                <h2>Page 1: Introduction</h2>
+                <p>This is the first page of the family history.</p>
+            </div>
+            <div class="page" id="page2" style="display: none;">
+                <h2>Page 2: Grandpa's Journey</h2>
+                <p>This is the second page about Grandpa's journey.</p>
+            </div>
+            <div class="page" id="page3" style="display: none;">
+                <h2>Page 3: Life in South Africa</h2>
+                <p>This is the third page detailing life in South Africa.</p>
+            </div>
+            <div class="page" id="page4" style="display: none;">
+                <h2>Page 4: Descendants</h2>
+                <p>This page talks about the descendants of the family.</p>
+            </div>
+        </div>
+
+        <div class="controls">
+            <button id="homeButton">Home</button>
+            <button id="backButton" style="display: none;">Back</button>
+            <button id="nextButton">Next</button>
+        </div>
+
+        <footer class="footer">
+            <p>© 2025 Family History Project</p>
+        </footer>
+    </div>
+</body>
+</html>

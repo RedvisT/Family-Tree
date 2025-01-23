@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Family History Signup</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+    <script defer src="{{ url_for('static', filename='script/script.js') }}"></script>
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <h1>Family History</h1>
+        </header>
+
+        <div class="content">
+            <h2>Sign Up</h2>
+
+            <!-- Display Flash Messages -->
+            {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}
+                    <ul>
+                        {% for category, message in messages %}
+                            <li class="{{ category }}">{{ message }}</li>
+                        {% endfor %}
+                    </ul>
+                {% endif %}
+            {% endwith %}
+
+            <form method="POST" action="/signup">
+                <label for="username">Username:</label>
+                <input type="text" id="username" name="username" required>
+
+                <label for="password">Password:</label>
+                <input type="password" id="password" name="password" required>
+
+                <label for="confirm_password">Confirm Password:</label>
+                <input type="password" id="confirm_password" name="confirm_password" required>
+
+                <button type="submit">Sign Up</button>
+            </form>
+
+            <div class="home-link">
+                <p>Changed your mind? <a href="/">Home</a></p>
+            </div>
+        </div>
+
+        <footer class="footer">
+            <p>© 2025 Family History Project</p>
+        </footer>
+    </div>
+</body>
+</html>

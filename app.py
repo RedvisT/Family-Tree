@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect, url_for, flash
+from flask import Flask, render_template, request, redirect, url_for, flash, session
 import database_files  # Import the database functions
 import os
 
@@ -23,6 +23,7 @@ def login():
         # Check if the username and password are valid
         user = database_files.check_user_credentials(username, password)
         if user:
+            session['username'] = username  # Store username in session
             return redirect(url_for('family_home'))  # Redirect to family home page after successful login
         else:
             return render_template('login.html', alert_message="Invalid username or password", alert_type="error")
@@ -53,17 +54,29 @@ def signup():
 # Family home route (after login success)
 @app.route('/family_home')
 def family_home():
+    if 'username' not in session:
+        return redirect(url_for('login'))
     return render_template('index.html')
 
 # Introduction page route
 @app.route('/introduction')
 def introduction():
+    if 'username' not in session:
+        return redirect(url_for('login'))
     return render_template('introduction.html')
 
 # Family tree page route
 @app.route('/family_tree')
 def family_tree():
+    if 'username' not in session:
+        return redirect(url_for('login'))
     return render_template('family_tree.html')
+
+# Logout route
+@app.route('/logout')
+def logout():
+    session.pop('username', None)
+    return redirect(url_for('home'))
 
 if __name__ == '__main__':
     app.run(debug=True)

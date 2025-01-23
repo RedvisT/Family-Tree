@@ -39,14 +39,14 @@ def signup():
 
         # Check if passwords match
         if password != confirm_password:
-            return render_template('signup.html', error_message="Passwords do not match")
+            return render_template('signup.html', error_message="Passwords do not match", username=username)
 
         # Insert the user into the database
         success, message = database_files.insert_user(username, password)
         if success:
             return redirect(url_for('home', message="Account created successfully! You can now log in."))
         else:
-            return render_template('signup.html', error_message=message)
+            return render_template('signup.html', error_message=message, username=username)
 
     return render_template('signup.html')
 
@@ -54,6 +54,16 @@ def signup():
 @app.route('/family_home')
 def family_home():
     return render_template('index.html')
+
+# Introduction page route
+@app.route('/introduction')
+def introduction():
+    return render_template('introduction.html')
+
+# Family tree page route
+@app.route('/family_tree')
+def family_tree():
+    return render_template('family_tree.html')
 
 if __name__ == '__main__':
     app.run(debug=True)

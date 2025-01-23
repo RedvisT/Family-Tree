@@ -15,27 +15,16 @@
 
         <div class="content">
             <div class="page" id="page1">
-                <h2>Page 1: Introduction</h2>
-                <p>This is the first page of the family history.</p>
-            </div>
-            <div class="page" id="page2" style="display: none;">
-                <h2>Page 2: Grandpa's Journey</h2>
-                <p>This is the second page about Grandpa's journey.</p>
-            </div>
-            <div class="page" id="page3" style="display: none;">
-                <h2>Page 3: Life in South Africa</h2>
-                <p>This is the third page detailing life in South Africa.</p>
-            </div>
-            <div class="page" id="page4" style="display: none;">
-                <h2>Page 4: Descendants</h2>
-                <p>This page talks about the descendants of the family.</p>
+                <h2>Welcome to the Family History Project</h2>
+                <p>This is the greeting screen. Here you can find a description of how to navigate through the family history project.</p>
+                <p>The "Home" button will take you to the introduction page where you can read stories and introductions to each family member.</p>
+                <p>The "Next" button will take you to the family tree page where you can explore the family tree.</p>
             </div>
         </div>
 
         <div class="controls">
-            <button id="homeButton">Home</button>
-            <button id="backButton" style="display: none;">Back</button>
-            <button id="nextButton">Next</button>
+            <a href="{{ url_for('introduction') }}" id="homeButton">Home</a>
+            <a href="{{ url_for('family_tree') }}" id="nextButton">Next</a>
         </div>
 
         <footer class="footer">

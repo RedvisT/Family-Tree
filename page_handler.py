@@ -1,4 +1,5 @@
 # Remove this line:
+import os
 from flask import Flask, render_template, request, redirect, url_for, flash
 
 import sqlite3
@@ -6,7 +7,8 @@ from database_files import DATABASE
 import database_files  # Import your database file
 
 app = Flask(__name__)
-app.secret_key = 'your_secret_key'  # Required for flashing messages
+# Set the secret key to enable session and flash functionality
+app.secret_key = os.urandom(24)  # Or use a fixed string for production
 
 # Route for displaying the signup page (GET method)
 @app.route('/signup', methods=['GET'])

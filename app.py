@@ -72,6 +72,48 @@ def family_tree():
         return redirect(url_for('login'))
     return render_template('family_tree.html')
 
+# Route to add family member
+@app.route('/add_member', methods=['GET', 'POST'])
+def add_member():
+    if request.method == 'POST':
+        # Extract form data
+        first_name = request.form['FirstName']
+        last_name = request.form['LastName']
+        birthdate = request.form['Birthdate']
+        deathdate = request.form['Deathdate']
+        gender = request.form['Gender']
+        place_of_birth = request.form['PlaceOfBirth']
+        photo = request.files['Photo'].read() if 'Photo' in request.files else None
+
+        # Extract family relationships
+        biological_father_id = request.form['BiologicalFatherID']
+        stepfather_id = request.form['StepfatherID']
+        mother_id = request.form['MotherID']
+        stepmother_id = request.form['StepMotherID']
+        current_spouse_id = request.form['CurrentSpouseID']
+        divorced_spouse_id = request.form['DivorcedSpouseID']
+        adoptive_father_id = request.form['AdoptiveFatherID']
+        adoptive_mother_id = request.form['AdoptiveMotherID']
+        biological_mother_id = request.form['BiologicalMotherID']
+
+        # Add member to the database
+        db = database_files.get_db()
+        db.execute('''
+            INSERT INTO FamilyTree (FirstName, LastName, Birthdate, Deathdate, Gender, PlaceOfBirth, Photo,
+                                    BiologicalFatherID, StepfatherID, MotherID, StepMotherID, CurrentSpouseID,
+                                    DivorcedSpouseID, AdoptiveFatherID, AdoptiveMotherID, BiologicalMotherID)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+        ''', (first_name, last_name, birthdate, deathdate, gender, place_of_birth, photo,
+              biological_father_id, stepfather_id, mother_id, stepmother_id, current_spouse_id,
+              divorced_spouse_id, adoptive_father_id, adoptive_mother_id, biological_mother_id))
+        db.commit()
+        database_files.close_db()
+
+        # Redirect back to the family tree page
+        return redirect(url_for('family_tree'))
+
+    return render_template('add_member.html')
+
 # Logout route
 @app.route('/logout')
 def logout():

@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Family History</title>
+
     <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
     <script defer src="{{ url_for('static', filename='script/script.js') }}"></script>
 </head>
@@ -11,6 +12,7 @@
     <div class="container">
         <header class="header">
             <h1>Family History</h1>
+            <H2>Starting With The Taylor's 1915</H2>
         </header>
 
         <div class="content">
@@ -23,8 +25,8 @@
         </div>
 
         <div class="controls">
-            <a href="{{ url_for('introduction') }}" id="homeButton">Home</a>
-            <a href="{{ url_for('family_tree') }}" id="nextButton">Next</a>
+            <a href="{{ url_for('introduction') }}" id="homeButton">Introduction</a>
+            <a href="{{ url_for('family_tree') }}" id="nextButton">Family Tree</a>
             <a href="{{ url_for('logout') }}" id="logoutButton">Logout</a>
         </div>
 

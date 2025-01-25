@@ -1,5 +1,15 @@
 /* General Styles For Family Tree */
 
+
+.custom-text {
+    color: #8b4513;
+    font-family: 'Georgia', serif;
+    font-size: calc(2rem * 1.5);
+    padding-bottom: 0.3125rem;
+    margin-top: 5rem;
+    margin-bottom: 2rem;
+}
+
 h1 {
     color: #8b4513;
     font-family: 'Georgia', serif;
@@ -48,18 +58,18 @@ body {
 }
 
 .member {
-    background-color: #fff;/* white */
-    border: 0.0625rem solid #ddd;/* 1px = 0.0625rem */
-    box-shadow: 0 0 0.625rem rgba(0, 0, 0, 0.5);/* 10px = 0.625rem */
+    background-color: #c4c0b0;
 }
 
 .header {
     text-align: center;
-    padding: 0.625rem 0; /* 10px = 0.625rem */
+    padding: 1.25rem 0; /* Adjust padding if you need more space inside */
+    margin-top: 1.25rem; /* Add space above the header */
     background-color: #f5f5dc;
-    border-top: 0.125rem solid #4b3621; /* 2px = 0.125rem */
+    border-top: 0.125rem solid #4b3621;
     border-bottom: 0.125rem solid #4b3621;
 }
+
 
 .footer {
     text-align: center;
@@ -67,12 +77,27 @@ body {
     background-color: #f5f5dc;
     border-top: 0.125rem solid #4b3621; /* 2px = 0.125rem */
     border-bottom: 0.125rem solid #4b3621;
+    width: 100%;
+    margin-top: 20px;
+}
+
+
+.footer_memebers {
+    width: 100%;
+    text-align: center;
+    margin-top: 20px;
+}
+
+
+
+.footer .btn {
+    margin-top: 30px; /* Adjust the space as needed */
+    margin-bottom: 30px;
 }
 
 .footer .btnTwo {
     margin-top: 1rem; /* 20px = 1.25rem */
-    margin-right: 3rem; /* 20px = 1.25rem */
-    margin-bottom: 30px;
+    margin-bottom: 1rem;
     width: auto; /* Makes the button stretch to the full width */
     padding: 10px; /* Adds padding inside the button */
     background-color: #8b4513; /* Saddle brown color for the button */
@@ -137,22 +162,16 @@ form button:hover {
     background-color: #4b3621;
 }
 
-
 .form-container_memebers {
     display: flex;
     flex-wrap: wrap;
 }
 
-.footer_memebers {
-    width: 100%;
-    text-align: center;
-    margin-top: 20px;
-}
-
 .form-container {
+    width: 100%;
     display: flex;
     flex-wrap: wrap;
-    gap: 20px; /* Adds spacing between columns */
+    gap: 20px;
 }
 
 .form-column {

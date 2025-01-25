@@ -5,27 +5,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Add Family Member</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
-    <style>
-        .form-container {
-            display: flex;
-            flex-wrap: wrap;
-        }
-        .form-column {
-            flex: 1;
-            min-width: 300px; /* Adjust as needed */
-            padding: 10px;
-        }
-        .footer {
-            width: 100%;
-            text-align: center;
-            margin-top: 20px;
-        }
-    </style>
+
 </head>
 <body>
     <div class="member">
         <header class="header">
-            <h1>Welcome, Family Member! Add Yourself Here</h1>
+            <div class="custom-text">Welcome, Family Member! Add Yourself Here</div>
         </header>
 
         <div class="content">
@@ -90,7 +75,7 @@
 
                     <!-- Children Section (New Column) -->
                     <div class="form-column">
-                        <h3>Children (Up to 10)</h3>
+                        <h3>Children</h3>
                         <label for="FirstChildID">First Child ID:</label>
                         <input type="text" name="FirstChildID" id="FirstChildID">
 
@@ -102,6 +87,19 @@
 
                         <label for="FourthChildID">Fourth Child ID:</label>
                         <input type="text" name="FourthChildID" id="FourthChildID">
+
+                        <label for="FifthChildID">Fifth Child ID:</label>
+                        <input type="text" name="FifthChildID" id="FifthChildID">
+
+                        <label for="SixthChildID">Sixth Child ID:</label>
+                        <input type="text" name="SixthChildID" id="SixthChildID">
+
+                        <label for="SeventhChildID">Seventh Child ID:</label>
+                        <input type="text" name="SeventhChildID" id="SeventhChildID">
+
+                        <label for="EighthChildID">Eighth Child ID:</label>
+                        <input type="text" name="EighthChildID" id="EighthChildID">
+
 
                         <!-- More children fields here -->
                     </div>

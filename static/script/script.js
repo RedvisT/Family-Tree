@@ -61,3 +61,23 @@ function validatePassword() {
     }
     return true; // Allow form submission
 }
+
+document.addEventListener('DOMContentLoaded', () => {
+    const birthdateInput = document.getElementById('birthdate');
+
+    birthdateInput.addEventListener('input', () => {
+        const value = birthdateInput.value.replace(/\D/g, ''); // Remove non-digit characters
+        let formattedValue = value;
+
+        if (value.length > 4) {
+            formattedValue = `${value.slice(0, 2)}/${value.slice(2, 4)}/${value.slice(4, 8)}`;
+        } else if (value.length > 2) {
+            formattedValue = `${value.slice(0, 2)}/${value.slice(2, 4)}`;
+        } else if (value.length > 0) {
+            formattedValue = `${value.slice(0, 2)}`;
+        }
+
+        birthdateInput.value = formattedValue;
+    });
+});
+

@@ -45,23 +45,28 @@ def signup():
         gender = request.form['gender']
 
         # Validate the user data
-        validation_errors = validation.validate_user_data(username, password, confirm_password, first_name, middle_name, last_name, birthdate, gender)
+        validation_errors, middle_name = validation.validate_user_data(username, password, confirm_password, first_name, middle_name, last_name, birthdate, gender)
         if validation_errors:
-            return render_template('signup.html', error_messages=validation_errors, username=username)
+            return render_template('signup.html', error_messages=validation_errors, username=username,
+                                   first_name=first_name, middle_name=middle_name, last_name=last_name,
+                                   birthdate=birthdate, gender=gender)
 
         # Check if passwords match
         if password != confirm_password:
-            return render_template('signup.html', error_message="Passwords do not match", username=username)
+            return render_template('signup.html', error_message="Passwords do not match", username=username,
+                                   first_name=first_name, middle_name=middle_name, last_name=last_name,
+                                   birthdate=birthdate, gender=gender)
 
         # Insert the user into the database
         success, message = database_files.insert_user(username, password, first_name, middle_name, last_name, birthdate, gender)
         if success:
             return redirect(url_for('home', message="Account created successfully! You can now log in."))
         else:
-            return render_template('signup.html', error_message=message, username=username)
+            return render_template('signup.html', error_message=message, username=username,
+                                   first_name=first_name, middle_name=middle_name, last_name=last_name,
+                                   birthdate=birthdate, gender=gender)
 
     return render_template('signup.html')
-
 
 # Family home route (after login success)
 @app.route('/family_home')

@@ -221,3 +221,13 @@ form button:hover {
 .home-link {
     margin-top: 0.625rem;
 }
+
+
+/* Styles to make the placeholder appear as fixed text */
+/* Date Field */
+#birthdate::placeholder {
+    color: gray;
+    font-style: italic;
+    opacity: 1; /* Show the placeholder */
+}
+

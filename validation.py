@@ -12,7 +12,9 @@ def validate_user_data(username, password, confirm_password, first_name, middle_
     if not is_valid_name(first_name):
         errors.append("Invalid first name. Only letters and spaces are allowed.")
 
-    if not is_valid_name(middle_name):
+    if middle_name == "":
+        middle_name = "N/A"
+    elif middle_name != "N/A" and not is_valid_name(middle_name):
         errors.append("Invalid middle name. Only letters and spaces are allowed.")
 
     if not is_valid_name(last_name):
@@ -23,4 +25,4 @@ def validate_user_data(username, password, confirm_password, first_name, middle_
 
     # Additional checks for other fields can be added here
 
-    return errors
+    return errors, middle_name

@@ -1,6 +1,7 @@
 from flask import Flask, render_template, request, redirect, url_for, flash, session
 import database_files  # Import the database functions
 import os
+import validation
 
 # Initialize the Flask app
 app = Flask(__name__)
@@ -37,19 +38,30 @@ def signup():
         username = request.form['username']
         password = request.form['password']
         confirm_password = request.form['confirm_password']
+        first_name = request.form['first_name']
+        middle_name = request.form['middle_name']
+        last_name = request.form['last_name']
+        birthdate = request.form['birthdate']
+        gender = request.form['gender']
+
+        # Validate the user data
+        validation_errors = validation.validate_user_data(username, password, confirm_password, first_name, middle_name, last_name, birthdate, gender)
+        if validation_errors:
+            return render_template('signup.html', error_messages=validation_errors, username=username)
 
         # Check if passwords match
         if password != confirm_password:
             return render_template('signup.html', error_message="Passwords do not match", username=username)
 
         # Insert the user into the database
-        success, message = database_files.insert_user(username, password)
+        success, message = database_files.insert_user(username, password, first_name, middle_name, last_name, birthdate, gender)
         if success:
             return redirect(url_for('home', message="Account created successfully! You can now log in."))
         else:
             return render_template('signup.html', error_message=message, username=username)
 
     return render_template('signup.html')
+
 
 # Family home route (after login success)
 @app.route('/family_home')
@@ -71,48 +83,6 @@ def family_tree():
     if 'username' not in session:
         return redirect(url_for('login'))
     return render_template('family_tree.html')
-
-# Route to add family member
-@app.route('/add_member', methods=['GET', 'POST'])
-def add_member():
-    if request.method == 'POST':
-        # Extract form data
-        first_name = request.form['FirstName']
-        last_name = request.form['LastName']
-        birthdate = request.form['Birthdate']
-        deathdate = request.form['Deathdate']
-        gender = request.form['Gender']
-        place_of_birth = request.form['PlaceOfBirth']
-        photo = request.files['Photo'].read() if 'Photo' in request.files else None
-
-        # Extract family relationships
-        biological_father_id = request.form['BiologicalFatherID']
-        stepfather_id = request.form['StepfatherID']
-        mother_id = request.form['MotherID']
-        stepmother_id = request.form['StepMotherID']
-        current_spouse_id = request.form['CurrentSpouseID']
-        divorced_spouse_id = request.form['DivorcedSpouseID']
-        adoptive_father_id = request.form['AdoptiveFatherID']
-        adoptive_mother_id = request.form['AdoptiveMotherID']
-        biological_mother_id = request.form['BiologicalMotherID']
-
-        # Add member to the database
-        db = database_files.get_db()
-        db.execute('''
-            INSERT INTO FamilyTree (FirstName, LastName, Birthdate, Deathdate, Gender, PlaceOfBirth, Photo,
-                                    BiologicalFatherID, StepfatherID, MotherID, StepMotherID, CurrentSpouseID,
-                                    DivorcedSpouseID, AdoptiveFatherID, AdoptiveMotherID, BiologicalMotherID)
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-        ''', (first_name, last_name, birthdate, deathdate, gender, place_of_birth, photo,
-              biological_father_id, stepfather_id, mother_id, stepmother_id, current_spouse_id,
-              divorced_spouse_id, adoptive_father_id, adoptive_mother_id, biological_mother_id))
-        db.commit()
-        database_files.close_db()
-
-        # Redirect back to the family tree page
-        return redirect(url_for('family_tree'))
-
-    return render_template('add_member.html')
 
 # Logout route
 @app.route('/logout')

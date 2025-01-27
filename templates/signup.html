@@ -31,32 +31,33 @@
                 </ul>
             {% endif %}
 
-            <form method="POST" action="{{ url_for('signup') }}">
+            <form method="POST" action="{{ url_for('page_handler.signup') }}">
+
                 <label for="username">Username:</label>
-                <input type="text" id="username" name="username" value="{{ username if username else '' }}" required>
+                <input type="text" id="username" name="username" value="{{ username if username else '' }}" required oninput="clearErrorMessage()">
 
                 <label for="password">Password:</label>
-                <input type="password" id="password" name="password" required>
+                <input type="password" id="password" name="password" required oninput="clearErrorMessage()">
 
                 <label for="confirm_password">Confirm Password:</label>
-                <input type="password" id="confirm_password" name="confirm_password" required>
+                <input type="password" id="confirm_password" name="confirm_password" required oninput="clearErrorMessage()">
 
                 <label for="first_name">First Name:</label>
-                <input type="text" id="first_name" name="first_name" required pattern="^[A-Za-z ]+$" value="{{ first_name if first_name else '' }}">
+                <input type="text" id="first_name" name="first_name" required pattern="^[A-Za-z ]+$" value="{{ first_name if first_name else '' }}" oninput="clearErrorMessage()">
 
                 <label for="middle_name">Middle Name:</label>
-                <input type="text" id="middle_name" name="middle_name" pattern="^[A-Za-z ]+$" value="{{ middle_name if middle_name else '' }}">
+                <input type="text" id="middle_name" name="middle_name" pattern="^[A-Za-z ]+$" value="{{ middle_name if middle_name else '' }}" oninput="clearErrorMessage()">
 
                 <label for="last_name">Last Name:</label>
-                <input type="text" id="last_name" name="last_name" required pattern="^[A-Za-z ]+$" value="{{ last_name if last_name else '' }}">
+                <input type="text" id="last_name" name="last_name" required pattern="^[A-Za-z ]+$" value="{{ last_name if last_name else '' }}" oninput="clearErrorMessage()">
 
                 <label for="birthdate">Birthdate (DD/MM/YYYY):</label>
-                <input type="text" id="birthdate" name="birthdate" required pattern="\d{2}/\d{2}/\d{4}" placeholder="DD/MM/YYYY" value="{{ birthdate if birthdate else '' }}">
+                <input type="text" id="birthdate" name="birthdate" required pattern="\d{2}/\d{2}/\d{4}" placeholder="DD/MM/YYYY" value="{{ birthdate if birthdate else '' }}" oninput="clearErrorMessage()">
 
                 <div style="margin-top: 1rem;"></div>
 
                 <label for="gender">Gender:</label>
-                <select id="gender" name="gender" required>
+                <select id="gender" name="gender" required oninput="clearErrorMessage()">
                     <option value="">Select Gender</option>
                     <option value="male" {% if gender == 'male' %}selected{% endif %}>Male</option>
                     <option value="female" {% if gender == 'female' %}selected{% endif %}>Female</option>

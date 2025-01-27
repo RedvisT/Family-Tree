@@ -1,13 +1,25 @@
 import sqlite3
-from flask import g
+from flask import g, current_app
 import bcrypt
+from flask import Blueprint, render_template
+
+# Initialize the blueprint
+page_handler = Blueprint('page_handler', __name__)
+
+# Route to render the children.html page
+@page_handler.route('/add_children', methods=['GET'])
+def add_children_form():
+    return render_template('children.html')
+
+# Add other routes specific to this blueprint if necessary
+
 
 DATABASE = r"C:\Users\Redvis\Documents\A Database\FamilyHistory.db"
 
 def get_db():
     """Connect to the SQLite database."""
     if 'db' not in g:
-        g.db = sqlite3.connect(DATABASE)
+        g.db = sqlite3.connect(DATABASE, timeout=10)  # Set a timeout of 10 seconds
         g.db.row_factory = sqlite3.Row  # Allows access to columns by name
     return g.db
 
@@ -16,6 +28,13 @@ def close_db(e=None):
     db = g.pop('db', None)
     if db is not None:
         db.close()
+
+def init_db():
+    """Initialize the database and create tables if they do not exist."""
+    db = get_db()
+    with current_app.open_resource('schema.sql') as f:
+        db.executescript(f.read().decode('utf8'))
+    close_db()
 
 def get_user_by_username(username):
     """Retrieve a user by username."""

@@ -62,6 +62,16 @@ function validatePassword() {
     return true; // Allow form submission
 }
 
+// Add this function to check passwords on input and clear the error message if they match
+function checkPasswordsMatch() {
+    const password = document.getElementById('password').value;
+    const confirmPassword = document.getElementById('confirm_password').value;
+
+    if (password === confirmPassword) {
+        clearErrorMessage();
+    }
+}
+
 document.addEventListener('DOMContentLoaded', () => {
     const birthdateInput = document.getElementById('birthdate');
 
@@ -79,5 +89,23 @@ document.addEventListener('DOMContentLoaded', () => {
 
         birthdateInput.value = formattedValue;
     });
+
+    // Add event listeners to password fields to check if they match on input
+    const passwordInput = document.getElementById('password');
+    const confirmPasswordInput = document.getElementById('confirm_password');
+
+    passwordInput.addEventListener('input', checkPasswordsMatch);
+    confirmPasswordInput.addEventListener('input', checkPasswordsMatch);
 });
 
+function clearErrorMessage() {
+    const alertBox = document.getElementById('alert-message');
+    if (alertBox) {
+        alertBox.style.display = 'none';
+    }
+
+    const alertMessages = document.getElementById('alert-messages');
+    if (alertMessages) {
+        alertMessages.style.display = 'none';
+    }
+}

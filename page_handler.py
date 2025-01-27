@@ -1,10 +1,8 @@
-# Remove this line:
-import os
-from flask import Blueprint, Flask, render_template, request, redirect, url_for, flash
+from flask import Blueprint, render_template, request, redirect, session, url_for, flash
+import database_files
+import bcrypt
 
-import sqlite3
-from database_files import DATABASE
-import database_files  # Import your database file
+import validation
 
 # Initialize the blueprint
 page_handler = Blueprint('page_handler', __name__)
@@ -14,66 +12,71 @@ page_handler = Blueprint('page_handler', __name__)
 def add_children_form():
     return render_template('children.html')
 
-# Add other routes specific to this blueprint if necessary
-
-app = Flask(__name__)
-# Set the secret key to enable session and flash functionality
-app.secret_key = os.urandom(24)  # Or use a fixed string for production
-
 # Route for displaying the signup page (GET method)
-@app.route('/signup', methods=['GET'])
+@page_handler.route('/signup', methods=['GET'])
 def signup_form():
     return render_template('signup.html')
 
 # Route for handling the form submission (POST method)
-@app.route('/signup', methods=['POST'])
+@page_handler.route('/signup', methods=['POST'])
 def signup():
     username = request.form['username']
     password = request.form['password']
     confirm_password = request.form['confirm_password']
+    first_name = request.form['first_name']
+    middle_name = request.form['middle_name']
+    last_name = request.form['last_name']
+    birthdate = request.form['birthdate']
+    gender = request.form['gender']
 
     # Check if passwords match
     if password != confirm_password:
-        return render_template('signup.html', error_message="Passwords do not match!")
+        return render_template('signup.html', error_message="Passwords do not match!", username=username,
+                               first_name=first_name, middle_name=middle_name, last_name=last_name,
+                               birthdate=birthdate, gender=gender)
 
+    # Set middle name to "N/A" if empty
+    if not middle_name:
+        middle_name = "N/A"
 
-    # Insert user into the database (you may want to hash the password before saving it)
-    try:
-        # Try to insert the user into the database
-        user_created = database_files.insert_user(username, password)
-        if user_created:
-            return render_template('signup.html', success_message="Account created successfully! You can now log in.")
+    # Validate the user data
+    validation_errors, middle_name = validation.validate_user_data(username, password, confirm_password, first_name, middle_name, last_name, birthdate, gender)
+    if validation_errors:
+        return render_template('signup.html', error_messages=validation_errors, username=username,
+                               first_name=first_name, middle_name=middle_name, last_name=last_name,
+                               birthdate=birthdate, gender=gender)
 
-        else:
-            return render_template('signup.html', error_message="Username already exists!")
+    # Hash and salt the password
+    hashed_password = bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt())
 
-    except sqlite3.Error:
-        return render_template('signup.html', error_message="Database connection error, please try again later.")
-
-
-# Route for displaying the login page (GET method)
-@app.route('/login', methods=['GET'])
-def login_form():
-    return render_template('login.html')
+    # Insert user into the database (with hashed password)
+    success, message = database_files.insert_user(username, hashed_password.decode('utf-8'),
+                                                   first_name, middle_name, last_name, birthdate, gender)
+    if success:
+        return redirect(url_for('home', message="Account created successfully! You can now log in."))
+    else:
+        return render_template('signup.html', error_message=message, username=username,
+                               first_name=first_name, middle_name=middle_name, last_name=last_name,
+                               birthdate=birthdate, gender=gender)
 
 # Route for handling login (POST method)
-@app.route('/login', methods=['POST'])
+@page_handler.route('/login', methods=['POST', 'GET'])
 def login():
-    username = request.form['username']
-    password = request.form['password']
+    if request.method == 'POST':
+        username = request.form['username']
+        password = request.form['password']
 
-    # Check if username and password match in the database
-    conn = sqlite3.connect(DATABASE)
-    cursor = conn.cursor()
-    cursor.execute('SELECT * FROM users WHERE username=? AND password=?', (username, password))
-    user = cursor.fetchone()
+        # Check if the username exists and retrieve the hashed password
+        user = database_files.get_user_by_username(username)
+        if user:
+            stored_hashed_password = user['password']
+            # Verify the entered password against the stored hashed password
+            if bcrypt.checkpw(password.encode('utf-8'), stored_hashed_password.encode('utf-8')):
+                session['username'] = username  # Store username in session
+                return redirect(url_for('family_home'))
+            else:
+                return render_template('login.html', error_message="Invalid username or password. Please try again.")
+        else:
+            return render_template('login.html', error_message="Invalid username or password. Please try again.")
 
-    if user:
-        return redirect(url_for('home', success_message="Logged in successfully!"))
-
-    else:
-        return render_template('login.html', error_message="Invalid credentials. Please try again.")
-
-
-if __name__ == '__main__':
-    app.run(debug=True)
+    return render_template('login.html')

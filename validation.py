@@ -26,3 +26,8 @@ def validate_user_data(username, password, confirm_password, first_name, middle_
     # Additional checks for other fields can be added here
 
     return errors, middle_name
+
+
+    # Additional checks for other fields can be added here
+
+    return errors, middle_name

@@ -1,10 +1,20 @@
 # Remove this line:
 import os
-from flask import Flask, render_template, request, redirect, url_for, flash
+from flask import Blueprint, Flask, render_template, request, redirect, url_for, flash
 
 import sqlite3
 from database_files import DATABASE
 import database_files  # Import your database file
+
+# Initialize the blueprint
+page_handler = Blueprint('page_handler', __name__)
+
+# Route to render the children.html page
+@page_handler.route('/add_children', methods=['GET'])
+def add_children_form():
+    return render_template('children.html')
+
+# Add other routes specific to this blueprint if necessary
 
 app = Flask(__name__)
 # Set the secret key to enable session and flash functionality

@@ -1,3 +1,4 @@
+import bcrypt
 from flask import Flask, render_template, request, redirect, url_for, flash, session
 import database_files  # Import the database functions
 import os
@@ -21,11 +22,16 @@ def login():
         username = request.form['username']
         password = request.form['password']
 
-        # Check if the username and password are valid
-        user = database_files.check_user_credentials(username, password)
+        # Check if the username exists and retrieve the hashed password
+        user = database_files.get_user_by_username(username)
         if user:
-            session['username'] = username  # Store username in session
-            return redirect(url_for('family_home'))  # Redirect to family home page after successful login
+            stored_hashed_password = user['password']
+            # Verify the entered password against the stored hashed password
+            if bcrypt.checkpw(password.encode('utf-8'), stored_hashed_password.encode('utf-8')):
+                session['username'] = username  # Store username in session
+                return redirect(url_for('family_home'))
+            else:
+                return render_template('login.html', alert_message="Invalid username or password", alert_type="error")
         else:
             return render_template('login.html', alert_message="Invalid username or password", alert_type="error")
 
@@ -57,8 +63,11 @@ def signup():
                                    first_name=first_name, middle_name=middle_name, last_name=last_name,
                                    birthdate=birthdate, gender=gender)
 
-        # Insert the user into the database
-        success, message = database_files.insert_user(username, password, first_name, middle_name, last_name, birthdate, gender)
+        # Hash and salt the password
+        hashed_password = bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt())
+
+        # Insert the user into the database with the hashed password
+        success, message = database_files.insert_user(username, hashed_password.decode('utf-8'), first_name, middle_name, last_name, birthdate, gender)
         if success:
             return redirect(url_for('home', message="Account created successfully! You can now log in."))
         else:

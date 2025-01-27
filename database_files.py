@@ -1,5 +1,6 @@
 import sqlite3
 from flask import g
+import bcrypt
 
 DATABASE = r"C:\Users\Redvis\Documents\A Database\FamilyHistory.db"
 
@@ -16,21 +17,31 @@ def close_db(e=None):
     if db is not None:
         db.close()
 
-def insert_user(username, password, first_name, middle_name, last_name, birthdate, gender):
+def get_user_by_username(username):
+    """Retrieve a user by username."""
+    db = get_db()
+    cursor = db.execute('SELECT username, password FROM users WHERE username=?', (username,))
+    user = cursor.fetchone()
+    close_db()  # Ensure the database connection is closed after the operation
+    if user:
+        return {'username': user['username'], 'password': user['password']}
+    else:
+        return None
+
+def insert_user(username, hashed_password, first_name, middle_name, last_name, birthdate, gender):
     """Insert a new user into the database."""
     db = get_db()
     try:
         db.execute('INSERT INTO users (username, password, first_name, middle_name, last_name, birthdate, gender) VALUES (?, ?, ?, ?, ?, ?, ?)',
-                   ( username,
-                     password,
-                     first_name,
-                     middle_name,
-                     last_name,
-                     birthdate,
-                     gender
-                    )
-                )
-
+                   (username,
+                    hashed_password,  # Store the hashed password
+                    first_name,
+                    middle_name,
+                    last_name,
+                    birthdate,
+                    gender
+                   )
+                  )
         db.commit()
         return True, None  # Return a tuple indicating success and no error message
     except sqlite3.IntegrityError:  # Handle the case where the username already exists
@@ -40,10 +51,10 @@ def insert_user(username, password, first_name, middle_name, last_name, birthdat
 
 def check_user_credentials(username, password):
     """Check if the username and password are correct."""
-    db = get_db()
-    cursor = db.execute('SELECT * FROM users WHERE username=? AND password=?', (username, password))
-    user = cursor.fetchone()
-    close_db()  # Ensure the database connection is closed after the operation
-    return user  # Return the user record if found, or None if not found
-
-
+    user = get_user_by_username(username)
+    if user:
+        stored_hashed_password = user['password']
+        # Verify the entered password against the stored hashed password
+        if bcrypt.checkpw(password.encode('utf-8'), stored_hashed_password.encode('utf-8')):
+            return user  # Return the user record if the password is correct
+    return None  # Return None if the credentials are invalid

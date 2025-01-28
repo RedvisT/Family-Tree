@@ -1,3 +1,4 @@
+import time  # Import the time module
 from flask import Flask, redirect, render_template, session, url_for
 import os
 from page_handler import page_handler  # Import the blueprint
@@ -36,6 +37,13 @@ def introduction():
     if 'username' not in session:
         return redirect(url_for('home'))
     return render_template('introduction.html')
+
+# Children page route
+@app.route('/children')
+def children():
+    if 'username' not in session:
+        return redirect(url_for('login'))  # Ensure only logged-in users can access
+    return render_template('children.html', time=time)  # Pass the time variable to the template
 
 # Family tree page route
 @app.route('/family_tree')

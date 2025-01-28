@@ -1,0 +1,49 @@
+Here I am making note on my Python learning!!!
+----------------------------------------------
+
+
+@app.route('/family_home')  # Define the route for the '/family_home' URL. This tells Flask to trigger the 'family_home' function when this URL is accessed.
+def family_home():  # Define the function 'family_home' that will be executed when the '/family_home' URL is accessed.
+    if 'username' not in session:  # Check if 'username' is not found in the session (i.e., the user is not logged in).
+        return redirect(url_for('home'))  # If no 'username' in session, redirect to the 'home' route. 'url_for' generates the URL for the 'home' route.
+    return render_template('index.html')  # If the user is logged in (username exists in session), render the 'index.html' template.
+
+
+Terminology and Concepts:
+Route (@app.route): This decorator defines the URL path that the function will be associated with. In this case, the path is /family_home.
+Function (family_home): This is the Python function that gets triggered when the URL defined by the route is accessed.
+Session: A dictionary-like object in Flask used to store data between requests. Here, it checks if the user is logged in by looking for a 'username' key.
+Redirect (redirect): This function sends the user to another route. It’s used here to send the user back to the homepage if they’re not logged in.
+URL Generation (url_for): A function that generates the URL for a given route. Here, it generates the URL for the home route.
+Render Template (render_template): This function renders an HTML file as the response for the request, in this case, 'index.html'.
+
+1. Route definition:
+
+    @app.route('/family_home')
+
+    Terminology: This is a route in Flask.
+    Explanation: It's defining a URL path (/family_home) that, when visited, triggers a specific function.
+
+2. Session check:
+
+
+    if 'username' not in session:
+
+    Terminology: session (Flask's session storage), if statement.
+    Explanation: The session is like a temporary storage for user data (in this case, checking if a user is logged in). The code checks if a username exists in the session. If not, it redirects the user to the home page.
+
+3. Redirect:
+
+
+    return redirect(url_for('home'))
+
+    Terminology: redirect (Flask function), url_for (Flask function), home (the name of the route).
+    Explanation: If the user isn't logged in (i.e., no username in the session), the redirect sends them to another route, in this case, home.
+
+4. Rendering a template:
+
+
+    return render_template('index.html')
+
+    Terminology: render_template (Flask function), 'index.html' (the template).
+    Explanation: If the user is logged in, the app renders the index.html template. This is the page they see.

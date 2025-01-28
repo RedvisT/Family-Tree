@@ -82,7 +82,7 @@ body {
 }
 
 
-.footer_memebers {
+.footer_members {
     width: 100%;
     text-align: center;
     margin-top: 20px;
@@ -162,7 +162,7 @@ form button:hover {
     background-color: #4b3621;
 }
 
-.form-container_memebers {
+.form-container_members {
     display: flex;
     flex-wrap: wrap;
 }

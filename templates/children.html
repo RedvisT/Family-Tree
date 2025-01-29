@@ -5,28 +5,35 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Children Information</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}?v={{ time.time() }}">
+    <script defer src="{{ url_for('static', filename='script/script.js') }}"></script>
 
 </head>
 <body>
-    <h1>Children Information</h1>
-    <form action="/add_child" method="POST">
-        <label for="first_name">First Name:</label>
-        <input type="text" id="first_name" name="first_name" required>
-        <br>
-        <label for="last_name">Last Name:</label>
-        <input type="text" id="last_name" name="last_name" required>
-        <br>
-        <label for="birthdate">Birthdate (DD/MM/YYYY):</label>
-        <input type="text" id="birthdate" name="birthdate" required>
-        <br>
-        <label for="gender">Gender:</label>
-        <select id="gender" name="gender">
-            <option value="Male">Male</option>
-            <option value="Female">Female</option>
-        </select>
-        <br>
-        <button type="submit">Add Child</button>
-    </form>
-    <a href="/family_tree">Back to Family Tree</a>
+    <div class="container">
+        <header class="header">
+            <h1>Children Information</h1>
+        </header>
+        <form action="/add_child" method="POST">
+            <label for="first_name">First Name:</label>
+            <input type="text" id="first_name" name="first_name" required>
+            <div style="margin-top: 1rem;"></div>
+            <label for="last_name">Last Name:</label>
+            <input type="text" id="last_name" name="last_name" required>
+            <div style="margin-top: 1rem;"></div>
+            <label for="birthdate">Birthdate (DD/MM/YYYY):</label>
+                <input type="text" id="birthdate" name="birthdate" required pattern="\d{2}/\d{2}/\d{4}" placeholder="DD/MM/YYYY" value="{{ birthdate if birthdate else '' }}" oninput="clearErrorMessage()">
+            <div style="margin-top: 1rem;"></div>
+            <label for="gender">Gender:</label>
+            <select id="gender" name="gender">
+                <option value="Male">Male</option>
+                <option value="Female">Female</option>
+            </select>
+            <div style="margin-top: 1rem;"></div>
+
+            <button type="submit">Add Child</button>
+            <div style="margin-top: 1rem;"></div>
+            <a href="/family_tree">Back to Family Tree</a>
+        </form>
+    </div>
 </body>
 </html>

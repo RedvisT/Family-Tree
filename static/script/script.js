@@ -1,11 +1,4 @@
 document.addEventListener('DOMContentLoaded', () => {
-    let currentPage = 1;
-    const totalPages = 4;
-
-    const homeButton = document.getElementById('homeButton');
-    const backButton = document.getElementById('backButton');
-    const nextButton = document.getElementById('nextButton');
-    const pages = document.querySelectorAll('.page');
 
     // Function to show the current page
     function showPage(pageNumber) {
